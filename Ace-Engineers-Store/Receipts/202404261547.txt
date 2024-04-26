@@ -1,0 +1,5 @@
+All purchased items
+ - Product: SKU: GM1148 | Name: Retro Handheld Arcade | Price: $24.45 | Department: Games | Quantity: 1
+ - Product: SKU: PW1431 | Name: Wireless Charger iPhone | Price: $12.99 | Department: Electronics | Quantity: 2
+ - Product: SKU: CP2012 | Name: Desktop PC Computer Intel Core i5 | Price: $139.00 | Department: Computers | Quantity: 1
+Total amount paid $189.43

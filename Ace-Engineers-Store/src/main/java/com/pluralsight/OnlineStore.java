@@ -1,5 +1,6 @@
 package com.pluralsight;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public class OnlineStore {
     private static void displayProducts(Scanner scanner) {
 
         System.out.println("\n~~~~~~~~ All current items Start ~~~~~~~");
-
+        // display all products in the inventory
         for (Product product : inventory) {
             System.out.println(product);
         }
@@ -160,12 +161,12 @@ public class OnlineStore {
 
     public static void searchByPrice(Scanner scanner) {
         System.out.println("\nYou have chosen search by price");
-        System.out.print("\nPlease provide the max price: ");
-        // max price
-        double max = scanner.nextDouble();
         System.out.print("\nPlease provide the min price: ");
         // min price
         double min = scanner.nextDouble();
+        System.out.print("\nPlease provide the max price: ");
+        // max price
+        double max = scanner.nextDouble();
         // clear left over in buffer
         scanner.nextLine();
         System.out.println();
@@ -366,6 +367,7 @@ public class OnlineStore {
         System.out.println();
         System.out.printf("\n****** Your total for today is %,.2f ******", total);
         // delete all items from cart
+        salesFileMaker();
         userCart.clear();
         System.out.println();
         // Take user back home
@@ -373,10 +375,42 @@ public class OnlineStore {
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXIT METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     public static void exitProgram() {
         System.out.println("\nThank you for visiting! Goodbye, come again! :)");
     }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ WRITE SALES FILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    public static void salesFileMaker(){
+        LocalDateTime date = LocalDateTime.now();
+
+        String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+        String filePath = "/Users/butterflycoupe/Desktop/YearUp/Ace-" +
+                "Engineers-Store/Ace-Engineers-Store/Ace-Engineers-Store/Receipts/"
+                + formattedDate + ".txt";
+       try{
+           BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+           writer.write("All purchased items");
+           writer.newLine();
+           double total = 0.0;
+           for(CartItem item : userCart.values()){
+                total += item.getTotalPrice();
+                writer.write(" - " + item);
+                writer.newLine();
+           }
+           writer.write(String.format("Total amount paid $%,.2f", total));
+           writer.close();
+       } catch (Exception e) {
+           System.out.println("Error found" + e.getMessage());
+           e.printStackTrace();
+       }
+
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ end of file ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
+
 /*
  *
  * * ~~~~~~~~~~~~~ 10:20AM-10:25AM The Store Home Screen (T) ~~~~~~~~~~~~~~
@@ -417,10 +451,7 @@ public class OnlineStore {
  *
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2:30-3:00 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *
  * (TINA) TESTING
  * (NOEL) !!! READ ME !!!
  * (STAPHON) OPTIONAL TESTING
- *
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~ !!!! FINISHED !!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
