@@ -13,7 +13,7 @@ Welcome to Ace Engineers Store! This command-line application offers a seamless 
 
 - **Collaborators:** 
   - Noel Guillen
-  - Stephon Peterson
+  - Staphon Peterson
   - Tina Nguyen
   
 - **Project Description:** Ace Engineers Store is a Java project developed collaboratively by three software engineers. It provides a user-friendly command-line interface for easy shopping.
