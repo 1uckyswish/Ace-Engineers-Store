@@ -20,7 +20,7 @@ public class OnlineStore {
         displayUserHomeScreen();
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY HOME SCREEN METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY HOME SCREEN METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public static void displayUserHomeScreen() {
         // declare scanner to get home screen choice
@@ -49,7 +49,7 @@ public class OnlineStore {
         }
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD INVENTORY METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ LOAD INVENTORY METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public static void loadInventory() {
 
@@ -71,7 +71,7 @@ public class OnlineStore {
         }
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY PRODUCTS SCREEN METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY PRODUCTS SCREEN METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     private static void displayProducts(Scanner scanner) {
 
@@ -106,7 +106,7 @@ public class OnlineStore {
 
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~ SEARCH BY MAIN METHOD & OTHER SEARCHES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~ SEARCH BY MAIN METHOD & OTHER SEARCHES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public static void searchByChoice(Scanner scanner) {
         System.out.print("\nHow would you like to search by?\n" +
@@ -138,9 +138,9 @@ public class OnlineStore {
         System.out.print("\nYou have chosen to search by name!" +
                 "\nPlease provide name of item: ");
         String itemName = scanner.nextLine().trim().toLowerCase();
-        System.out.printf("Items matching : %s\n", itemName);
         boolean itemFound = false;
         // check for matching search by name ignoring case
+        System.out.println();
         for (Product product : inventory) {
             if (product.getName().toLowerCase().contains(itemName)) {
                 System.out.println(product);
@@ -149,7 +149,7 @@ public class OnlineStore {
         }
 
         if (!itemFound) {
-            System.out.printf("Sorry no items matching : %s\n", itemName);
+            System.out.printf("\nSorry no items matching : %s\n", itemName);
         }
 
         // re-run program
@@ -168,7 +168,7 @@ public class OnlineStore {
         double min = scanner.nextDouble();
         // clear left over in buffer
         scanner.nextLine();
-
+        System.out.println();
         // loop through and search for matching price range
         for (Product price : inventory) {
             if ((price.getPrice() >= min) && (price.getPrice() <= max)) {
@@ -211,13 +211,14 @@ public class OnlineStore {
                 depChoice = "Electronics";
                 break;
             default:
-                System.out.println("Invalid department choice please choose again!");
+                System.out.println("Invalid department choice please choose again! :(");
                 searchByDepartment(scanner);
                 break;
         }
 
         // display matching categories by checking through inventory
         System.out.printf("\nMatching categories for: %s\n", depChoice);
+        System.out.println();
         for (Product currentDep : inventory) {
             if (currentDep.getDepartment().equals(depChoice)) {
                 System.out.println(currentDep);
@@ -228,26 +229,26 @@ public class OnlineStore {
         displayUserHomeScreen();
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY CART METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY CART METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // We need to loop check if items are inside
     private static void displayCart(Scanner scanner) {
-        System.out.println("\nWelcome to your cart!");
+        System.out.println("\n!!! Welcome to your cart !!!");
         if (userCart.isEmpty()) {
             System.out.println("\nSorry no items found in cart");
             displayUserHomeScreen();
         } else {
             // Calculating cart total
             double total = 0.0;
-            System.out.println("\n~~~~~ Your current cart items ~~~~~~~\n");
+            System.out.println("\n~~~~~~~~ Your current cart items ~~~~~~~\n");
             for (CartItem displayProducts : userCart.values()) {
                 // Show all cart items
                 System.out.println(displayProducts);
                 total += displayProducts.getTotalPrice();
             }
-
+            System.out.println();
             System.out.printf("Your cart total for today is : $%,.2f\n", total);
-
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
             // display user cart options
 
             String[] cartOptions = { "(1) Checkout ", "(2) Remove product from cart",
@@ -279,39 +280,43 @@ public class OnlineStore {
 
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADD TO CART METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADD TO CART METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     // We need to add the items from inventory to userCart variables declared up top
     public static void addToCart(Scanner scanner) {
         System.out.print("\nEnter the SKU number of the product you'd like to add to your cart: ");
         String userCartInput = scanner.nextLine().trim().toLowerCase();
         boolean addItemFlag = false;
-        // AV1051
 
+        System.out.println();
         for (Product product : inventory) {
             if (product.getSku().toLowerCase().equals(userCartInput)) {
-                addItemFlag = true;
                 if (userCart.containsKey(userCartInput)) {
                     CartItem updateCurrentItem = userCart.get(userCartInput);// sku number
                     updateCurrentItem.incrementQuantity();
                 } else {
                     userCart.put(userCartInput, new CartItem(product, 1));
                 }
+                addItemFlag = true;
             }
         }
 
+        if (!addItemFlag) {
+            System.out.println("\nProduct not found in inventory! :(\n");
+        } else {
+            System.out.println("\nThe item has been added to the cart :)\n");
+        }
+
         // ADD TO CART MESSAGE THANK YOU
-        System.out.println("\nThe item has been added to the cart");
         for (CartItem item : userCart.values()) {
             System.out.println(item);
         }
 
-        if (!addItemFlag) {
-            System.out.println("\nProduct not found in inventory!");
-        }
         displayProducts(scanner);
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REMOVE ITEM FROM CART METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REMOVE ITEM FROM CART METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     // We need to remove an item from user cart one by one
     public static void removeFromCart(Scanner scanner) {
         System.out.print("Enter the SKU number of the product you'd like to remove from your cart: ");
@@ -319,53 +324,67 @@ public class OnlineStore {
         boolean skuItemInCart = false;
 
         for (String key : userCart.keySet()) {
+            // If key equals a user option then remove
             if (key.equalsIgnoreCase(userRemovalChoice)) {
-                CartItem updateCartItem = userCart.get(key);
-                skuItemInCart = true;
-                if (updateCartItem.getQuantity() > 1) {
-                    updateCartItem.decrementQuantity();
-                    System.out.println("Item has been updated in the cart");
+                // Get the current Object
+                CartItem cartItem = userCart.get(key);
+                // If the Product exists already, then check its quantity
+                if (cartItem.getQuantity() > 1) {
+                    // Decrement quantity by 1 if true
+                    cartItem.decrementQuantity();
                 } else {
-                    System.out.println("Item has been removed from the cart");
+                    // Remove item from cart if quantity is 1
                     userCart.remove(key);
                 }
+                // Turn the flag to true for the following condition operations
+                skuItemInCart = true;
+                // Break out the loop as soon as the item is found.
+                break;
             }
         }
 
-        System.out.println("USER CART updated****");
+        System.out.println("\n~~~~~~~~~ Here is your current updated cart ~~~~~~~~ :)");
+        System.out.println();
         for (CartItem item : userCart.values()) {
             System.out.println(item);
         }
 
         if (!skuItemInCart) {
-            System.out.println("\nLooks like that item isn't currently in your cart\n");
+            System.out.println("\nLooks like that item isn't currently in your cart :( \n");
         }
         displayProducts(scanner);
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHECKOUT METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHECKOUT METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public static void checkoutCart() {
-        System.out.println("\n~~~~~~~ Thank you for shopping! ~~~~~~~~~~~~");
+        System.out.println("\n~~~~~~~~~~ Thank you for shopping! ~~~~~~~~~~~~");
         double total = 0.0;
         for (CartItem displayProducts : userCart.values()) {
             total += displayProducts.getTotalPrice();
         }
-        System.out.printf("\nYour total for today is %,.2f", total);
+        System.out.println();
+        System.out.printf("\n****** Your total for today is %,.2f ******", total);
         // delete all items from cart
         userCart.clear();
+        System.out.println();
         // Take user back home
         displayUserHomeScreen();
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXIT METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXIT METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public static void exitProgram() {
-        System.out.println("Thank you for visiting! Goodbye, come again! :)");
+        System.out.println("\nThank you for visiting! Goodbye, come again! :)");
     }
 }
-
 /*
  *
+ * * ~~~~~~~~~~~~~ 10:20AM-10:25AM The Store Home Screen (T) ~~~~~~~~~~~~~~
+ *
+ * The home screen should display a list of options that a user can choose from.
+ * 1 MIN (DONE) Display Products
+ * 1 MIN (DONE) Display Cart
+ * 1 MIN (DONE) Exit closes out of the application
  *
  * ~~~~~~~~~~~~~~~ 10:30AM-1:00PM Display Products (T/N)~~~~~~~~~~~~~
  *
@@ -404,12 +423,4 @@ public class OnlineStore {
  * (STAPHON) OPTIONAL TESTING
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~ !!!! FINISHED !!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *
- * ~~~~~~~~~~~~~ 10:20AM-10:25AM The Store Home Screen (T) ~~~~~~~~~~~~~~
- *
- * The home screen should display a list of options that a user can choose from.
- * 1 MIN (DONE) Display Products
- * 1 MIN (DONE) Display Cart
- * 1 MIN (DONE) Exit closes out of the application
- *
  */

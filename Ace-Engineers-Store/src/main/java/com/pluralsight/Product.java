@@ -1,4 +1,19 @@
 package com.pluralsight;
+/*
+This Product class represents an item available for sale,
+encapsulating its essential attributes
+such as price, SKU (Stock Keeping Unit), name, and
+department by declaring the attributes private.
+
+The class provides getter and setter methods for each attribute
+to manipulate of the product's properties.
+
+Additionally, the toString() method is overridden
+to provide a formatted representation of the product,
+including its SKU, name, price, and department,
+which can be useful for display or debugging purposes.
+
+*/
 
 public class Product {
 
