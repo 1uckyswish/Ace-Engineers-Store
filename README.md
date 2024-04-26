@@ -78,7 +78,7 @@ This option displays the products along with their details such as SKU, name, pr
 In this section, users will be presented with the total cost of all the products in their cart. Additionally, they will have the option to proceed with checkout, which will clear their cart. Upon successful checkout, a thank you message will be displayed to acknowledge the transaction.
 
 <!--IMAGE SCREENSHOT-->
-![Screenshot 2024-04-26 at 2 27 49 PM](https://github.com/1uckyswish/Ace-Engineers-Store/assets/107442415/f8b3da93-9fcd-4a56-91a4-00850d09ba0f)
+![Screenshot 2024-04-26 at 3 01 09 PM](https://github.com/1uckyswish/Ace-Engineers-Store/assets/107442415/25a2ec8b-305c-4a07-b059-14e44e37058d)
 
 
 ## Option 2 Shopping Cart Sub Menu: Remove Shopping Item
