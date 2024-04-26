@@ -34,6 +34,10 @@ public class CartItem {
         quantity--;
     }
 
+    public double getTotalPrice() {
+        return product.getPrice() * quantity;
+    }
+
     @Override
     public String toString() {
         return String.format("Product: %s | Quantity: %d", product.toString(), quantity);
